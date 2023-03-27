@@ -49,7 +49,7 @@ export default function InvoiceIntegration({children}: PropsWithChildren<unknown
     async function createInvoice(storeId: number, data: ICreateInvoiceRequest){
         setIsLoading(true);
         try{
-            const response = await api.post<ICreateInvoiceResponse>(`/invoices/stores/${storeId}`, {data})
+            const response = await api.post<ICreateInvoiceResponse>(`/invoices/stores/${storeId}`, data);
             return response.data
         }
         catch(error: unknown){
