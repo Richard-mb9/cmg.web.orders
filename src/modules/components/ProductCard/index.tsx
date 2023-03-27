@@ -39,7 +39,6 @@ interface IProps {
 
 
 export default function ProductCard(props: IProps){
-    const {tableName} = useParams();
     const { product } = props;
     const { id, availableDelivery, availableStore, price, name } = product;
 
@@ -47,7 +46,7 @@ export default function ProductCard(props: IProps){
         ? product.description
         : (product.description || '').substring(0,55) + "..."
     return (
-        <Link to={`/store/${product.storeId}/table/${tableName}/product/${id}` }
+        <Link to={`/store/${product.storeId}/product/${id}` }
             style={{
                 textDecoration: 'none', 
             }} 

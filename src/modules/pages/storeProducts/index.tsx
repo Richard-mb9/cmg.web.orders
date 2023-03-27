@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import {useParams} from 'react-router-dom';
 import Box from '@mui/material/Box';
 import CardMedia from "@mui/material/CardMedia";
 import Typography from '@mui/material/Typography';
@@ -10,6 +9,7 @@ import useStoreData from '../../../context/hooks/storeData';
 import InputSearch from '../../components/InputSearch';
 import { IProduct } from '../../../utils/interfaces';
 import { useInvoicesApi } from '../../../context/hooks/integrations';
+import { useSessionData } from '../../../context/hooks/sessionData';
 
 const styleImage = {
     '@media screen and (min-width: 900px)':{
@@ -23,7 +23,7 @@ const styleImage = {
 }
 
 export default function StoreProducts(){
-    const {storeId, tableName} = useParams();
+    const { storeId, tableName } = useSessionData();
 
     const [search, setSearch] = useState('');
     const [displayedProducts, setDisplayedProducts] = useState<IProduct[]>([]);
@@ -53,19 +53,21 @@ export default function StoreProducts(){
     }, [productsFromContext])
 
     const loadInvoice = async ()=>{
-        const invoice = await listByStoreId(parseInt(storeId as string), {tableName: tableName as string});
+        const invoice = await listByStoreId(parseInt((storeId || '0') as string), {tableName: tableName as string});
         if(invoice.length === 1){
             setInvoice(invoice[0]);
         }
     }
 
     useEffect(()=>{
-        Promise.all([
-            loadAllStoreData(parseInt(storeId as string)),
-            loadInvoice()
-        ].map(async (f)=> f));
+        if(!!!productsFromContext.length){
+            Promise.all([
+                loadAllStoreData(parseInt((storeId || '0') as string)),
+                loadInvoice()
+            ].map(async (f)=> f));
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [storeId]);
 
     return(
         <Box>

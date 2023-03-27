@@ -2,13 +2,16 @@ import React, { PropsWithChildren } from 'react';
 
 import IntegrationContext from './integrationsContext';
 import StoreDataContext  from './storeData';
+import SessionDataContext from './sessionData';
 
 export function GlobalContext({children}: PropsWithChildren<unknown>){
     return (
-        <IntegrationContext>
-            <StoreDataContext>
-                {children} 
-            </StoreDataContext>
-        </IntegrationContext>            
+        <SessionDataContext>
+            <IntegrationContext>
+                <StoreDataContext>
+                    {children} 
+                </StoreDataContext>
+            </IntegrationContext>  
+        </SessionDataContext>        
     )
 }
